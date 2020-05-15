@@ -1,54 +1,84 @@
-import React from 'react'
-
-export class Square extends React.Component {
-  render() {
-    return <button className="square">ok</button>
-  }
+import React, { useState } from 'react'
+import { Controlled as CodeMirror } from 'react-codemirror2'
+import styled from 'styled-components'
+import MD from 'react-markdown'
+require('codemirror/mode/javascript/javascript')
+import { UF } from './components/union-find'
+import { BTUD } from './components/binary-tree-upside-down'
+const options = {
+  mode: 'javascript',
+  theme: 'mdn-like',
+  height: 'auto',
+  lineNumbers: true,
+  readOnly: true,
+  viewportMargin: Infinity,
 }
-
-export class Board extends React.Component {
-  renderSquare(i) {
-    return <Square />
+const AppWrap = styled.div`
+  width: 90%;
+  max-width: 40em;
+  margin: 0 auto;
+  padding: 0 0 5em 0;
+`
+const OpsRow = styled.div`
+  padding: 1em 0;
+`
+const ImgSec = styled.div`
+  font-size: 0;
+  img {
+    max-width: 100%;
   }
-
-  render() {
-    const status = 'Next player: X'
-
-    return (
-      <div>
-        <div className="status">{status}</div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
-      </div>
-    )
-  }
+`
+const problemsMap = {
+  'union-find': UF,
+  'binary-tree-upside-down': BTUD,
 }
-
-export class Game extends React.Component {
-  render() {
-    return (
-      <div className="game">
-        <div className="game-board">
-          <Board />
-        </div>
-        <div className="game-info">
-          <div>{/* status */}</div>
-          <ol>{/* TODO */}</ol>
-        </div>
-      </div>
-    )
+export function App() {
+  const [value, setValue] = useState(BTUD)
+  function selectChange(e) {
+    setValue(problemsMap[e.target.value])
   }
+  return (
+    <AppWrap>
+      <OpsRow>
+        <label htmlFor="algorithm-select">
+          <b>Choose an algorithm: </b>
+        </label>
+        <select name="algorithms" id="algorithm-select" onChange={selectChange}>
+          <option value="binary-tree-upside-down">
+            Binary tree upside down
+          </option>
+          <option value="union-find">Union find</option>
+        </select>
+      </OpsRow>
+      {value.title ? <div>{value.title}</div> : null}
+      {value.problem ? <MD source={value.problem} /> : null}
+      <h3>Solution:</h3>
+      {value.images &&
+        value.images.length &&
+        value.images.map((e, idx) => {
+          return (
+            <ImgSec key={idx}>
+              <img src={e} />
+            </ImgSec>
+          )
+        })}
+      {value.codeArr &&
+        value.codeArr.length &&
+        value.codeArr.map((e, idx) => {
+          return (
+            <div key={idx}>
+              <p>{e.description}</p>
+              <CodeMirror
+                value={e.code}
+                options={options}
+                onBeforeChange={(editor, data, value) => {
+                  setValue(value)
+                }}
+                onChange={(editor, data, value) => {}}
+              />
+            </div>
+          )
+        })}
+    </AppWrap>
+  )
 }

@@ -1,0 +1,17 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html,
+body {
+  font-family: monospace;
+  font-size: 13px;
+}
+.react-codemirror2 + .react-codemirror2 {
+  margin-top: 1em;
+}
+.CodeMirror {
+  height: auto;
+  border: 1px solid #ddd;
+}

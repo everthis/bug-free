@@ -1,5 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Game } from './app'
+import { App } from './app'
+import 'normalize.css/normalize.css'
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/mdn-like.css'
+import './app.css'
 
-ReactDOM.render(<Game />, document.getElementById('root'))
+ReactDOM.render(<App />, document.getElementById('root'))
