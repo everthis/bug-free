@@ -5,6 +5,7 @@ import MD from 'react-markdown'
 require('codemirror/mode/javascript/javascript')
 import { UF } from './components/union-find'
 import { BTUD } from './components/binary-tree-upside-down'
+import { MRII } from './components/meeting-rooms-ii'
 const options = {
   mode: 'javascript',
   theme: 'mdn-like',
@@ -15,9 +16,9 @@ const options = {
 }
 const AppWrap = styled.div`
   width: 90%;
-  max-width: 40em;
+  max-width: 41em;
   margin: 0 auto;
-  padding: 0 0 5em 0;
+  padding: 1em 0 5em 0;
 `
 const OpsRow = styled.div`
   padding: 1em 0;
@@ -31,27 +32,36 @@ const ImgSec = styled.div`
 const problemsMap = {
   'union-find': UF,
   'binary-tree-upside-down': BTUD,
+  'meeting-rooms-ii': MRII,
 }
 export function App() {
   const [value, setValue] = useState(BTUD)
   function selectChange(e) {
     setValue(problemsMap[e.target.value])
   }
+  function renderProblem() {
+    return value.problem ? (
+      <>
+        <h3>Problem:</h3>
+        <MD source={value.problem} />
+      </>
+    ) : null
+  }
   return (
     <AppWrap>
       <OpsRow>
         <label htmlFor="algorithm-select">
-          <b>Choose an algorithm: </b>
+          <b>Choose a problem: </b>
         </label>
         <select name="algorithms" id="algorithm-select" onChange={selectChange}>
           <option value="binary-tree-upside-down">
             Binary tree upside down
           </option>
-          <option value="union-find">Union find</option>
+          <option value="meeting-rooms-ii">Meeting rooms II</option>
         </select>
       </OpsRow>
       {value.title ? <div>{value.title}</div> : null}
-      {value.problem ? <MD source={value.problem} /> : null}
+      {renderProblem()}
       <h3>Solution:</h3>
       {value.images &&
         value.images.length &&
