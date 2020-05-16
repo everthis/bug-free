@@ -26,6 +26,7 @@ const OpsRow = styled.div`
 const ImgSec = styled.div`
   font-size: 0;
   img {
+    min-height: 80px;
     max-width: 100%;
   }
 `

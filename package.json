@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -17,10 +18,13 @@
     "@babel/preset-react": "^7.9.4",
     "babel-loader": "^8.1.0",
     "codemirror": "^5.53.2",
+    "compression-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^6.0.0",
     "css-loader": "^3.5.3",
     "file-loader": "^6.0.0",
     "html-loader": "^1.1.0",
     "html-webpack-plugin": "^4.3.0",
+    "image-webpack-loader": "^6.0.0",
     "normalize.css": "^8.0.1",
     "react": "^16.13.1",
     "react-codemirror2": "^7.1.0",
