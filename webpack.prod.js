@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const moduleConfig = require('./webpack.loaders')
+const distPath = path.resolve(__dirname, './dist/')
 
 module.exports = {
   mode: 'production',
@@ -24,7 +25,7 @@ module.exports = {
       filename: '[path].gz[query]',
       algorithm: 'gzip',
       test: /\.js$|\.css$|\.html$/,
-      threshold: 10240,
+      threshold: 10240 / 2,
       minRatio: 0.8,
     }),
     new CompressionPlugin({
@@ -34,17 +35,22 @@ module.exports = {
       compressionOptions: {
         level: 11,
       },
-      threshold: 10240,
+      threshold: 10240 / 2,
       minRatio: 0.8,
+      deleteOriginalAssets: true,
     }),
     new CopyPlugin({
       patterns: [
-        { from: 'src/*.png', to: '', flatten: true },
-        { from: 'src/*.webmanifest', to: '', flatten: true },
-        { from: 'src/*.svg', to: '', flatten: true },
-        { from: 'src/*.xml', to: '', flatten: true },
-        { from: 'src/*.ico', to: '', flatten: true },
-      ],
+        'src/*.png',
+        'src/*.webmanifest',
+        'src/*.svg',
+        'src/*.xml',
+        'src/*.ico',
+      ].map((e) => ({
+        from: e,
+        to: distPath,
+        flatten: true,
+      })),
       options: {
         concurrency: 100,
       },

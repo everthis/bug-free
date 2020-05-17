@@ -3,7 +3,6 @@ language: node_js
 addons:
   apt:
     packages:
-      - 'brotli'
       - 'python3'
       - 'python3-pip'
       - 'python3-setuptools'
@@ -16,26 +15,23 @@ install:
   - npm install --only=prod
 script:
   - npm run build
-  - brotli dist/index.html -o dist/index.html.br
   - aws configure set aws_access_key_id $S3_ACCESS_KEY_ID
   - aws configure set aws_secret_access_key $S3_SECRET_ACCESS_KEY
   - >
     aws s3 sync ./dist s3://$S3_BUCKET
     --exclude="*"
     --include="**/*.js.br"
-    --include="*.js.br"
     --content-encoding br
     --content-type="application/javascript"
-    --exclude="*.ts"
   - >
     aws s3 sync ./dist s3://$S3_BUCKET
     --exclude="*"
-    --include="**/*.html.br"
     --include="*.html.br"
     --content-encoding br
     --content-type="text/html"
-  - aws s3 sync ./dist s3://$S3_BUCKET --exclude="*.js.br"
+  - aws s3 sync ./dist s3://$S3_BUCKET --exclude="**/*.js.br" --exclude="*.html.br"
+  - aws s3 sync ./dist s3://$S3_BUCKET --delete
   - >
     aws cloudfront create-invalidation
     --distribution-id $AWS_DISTRIBUTION_ID
-    --paths /index.html
+    --paths "/index.html" "/index.html.br"
