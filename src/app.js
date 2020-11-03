@@ -6,6 +6,7 @@ require('codemirror/mode/javascript/javascript')
 import { UF } from './components/union-find'
 import { BTUD } from './components/binary-tree-upside-down'
 import { MRII } from './components/meeting-rooms-ii'
+
 const options = {
   mode: 'javascript',
   theme: 'mdn-like',
@@ -18,10 +19,10 @@ const AppWrap = styled.div`
   width: 90%;
   max-width: 41em;
   margin: 0 auto;
-  padding: 1em 0 5em 0;
+  padding: 1.2em 0 5em 0;
 `
 const OpsRow = styled.div`
-  padding: 1em 0;
+  padding: 1.1em 0;
 `
 const ImgSec = styled.div`
   font-size: 0;
@@ -50,6 +51,7 @@ export function App() {
   }
   return (
     <AppWrap>
+      <h1>Even though we never said it to each other, we knew.</h1>
       <OpsRow>
         <label htmlFor="algorithm-select">
           <b>Choose a problem: </b>
