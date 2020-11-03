@@ -1,18 +1,19 @@
-import React, { useState } from 'react'
-import { Controlled as CodeMirror } from 'react-codemirror2'
-import styled from 'styled-components'
-import MD from 'react-markdown'
-require('codemirror/mode/javascript/javascript')
-import { UF } from './components/union-find'
-import { BTUD } from './components/binary-tree-upside-down'
-import { MRII } from './components/meeting-rooms-ii'
-
+import React, { useState } from "react"
+import { Controlled as CodeMirror } from "react-codemirror2"
+import styled from "styled-components"
+import MD from "react-markdown"
+require("codemirror/mode/javascript/javascript")
+import { UF } from "./components/union-find"
+import { BTUD } from "./components/binary-tree-upside-down"
+import { MRII } from "./components/meeting-rooms-ii"
+import { MPIJS } from "./components/maximum-profit-in-job-scheduling"
 const options = {
-  mode: 'javascript',
-  theme: 'mdn-like',
-  height: 'auto',
+  mode: "javascript",
+  theme: "mdn-like",
+  height: "auto",
   lineNumbers: true,
   readOnly: true,
+  // lineWrapping: true,
   viewportMargin: Infinity,
 }
 const AppWrap = styled.div`
@@ -22,7 +23,12 @@ const AppWrap = styled.div`
   padding: 1.2em 0 5em 0;
 `
 const OpsRow = styled.div`
-  padding: 1.1em 0;
+  padding: 1.2em 0;
+`
+const DescriptionSection = styled.div`
+  pre {
+    white-space: break-spaces;
+  }
 `
 const ImgSec = styled.div`
   font-size: 0;
@@ -32,12 +38,13 @@ const ImgSec = styled.div`
   }
 `
 const problemsMap = {
-  'union-find': UF,
-  'binary-tree-upside-down': BTUD,
-  'meeting-rooms-ii': MRII,
+  "union-find": UF,
+  "binary-tree-upside-down": BTUD,
+  "meeting-rooms-ii": MRII,
+  "maximum-profit-in-job-scheduling": MPIJS,
 }
 export function App() {
-  const [value, setValue] = useState(BTUD)
+  const [value, setValue] = useState(MPIJS)
   function selectChange(e) {
     setValue(problemsMap[e.target.value])
   }
@@ -53,28 +60,31 @@ export function App() {
     <AppWrap>
       <h1>Even though we never said it to each other, we knew.</h1>
       <OpsRow>
-        <label htmlFor="algorithm-select">
+        <label htmlFor='algorithm-select'>
           <b>Choose a problem: </b>
         </label>
-        <select name="algorithms" id="algorithm-select" onChange={selectChange}>
-          <option value="binary-tree-upside-down">
+        <select name='algorithms' id='algorithm-select' onChange={selectChange}>
+          <option value='maximum-profit-in-job-scheduling'>
+            Maximum Profit in Job Scheduling
+          </option>
+          <option value='binary-tree-upside-down'>
             Binary tree upside down
           </option>
-          <option value="meeting-rooms-ii">Meeting rooms II</option>
+          <option value='meeting-rooms-ii'>Meeting rooms II</option>
         </select>
       </OpsRow>
       {value.title ? <div>{value.title}</div> : null}
-      {renderProblem()}
+      <DescriptionSection>{renderProblem()}</DescriptionSection>
       <h3>Solution:</h3>
-      {value.images &&
-        value.images.length &&
-        value.images.map((e, idx) => {
-          return (
-            <ImgSec key={idx}>
-              <img src={e} />
-            </ImgSec>
-          )
-        })}
+      {value.images && value.images.length
+        ? value.images.map((e, idx) => {
+            return (
+              <ImgSec key={idx}>
+                <img src={e} />
+              </ImgSec>
+            )
+          })
+        : null}
       {value.codeArr &&
         value.codeArr.length &&
         value.codeArr.map((e, idx) => {
