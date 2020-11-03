@@ -23,7 +23,7 @@ const AppWrap = styled.div`
   padding: 1em 0 5em 0;
 `
 const OpsRow = styled.div`
-  padding: 1em 0;
+  padding: 1.2em 0;
 `
 const DescriptionSection = styled.div`
   pre {
