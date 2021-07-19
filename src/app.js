@@ -56,9 +56,13 @@ export function App() {
       </>
     ) : null
   }
+  const styles = {
+    display: 'none'
+  }
   return (
     <AppWrap>
       <h1>Even though we never said it to each other, we knew.</h1>
+      <div style={styles} >
       <OpsRow>
         <label htmlFor='algorithm-select'>
           <b>Choose a problem: </b>
@@ -102,6 +106,7 @@ export function App() {
             </div>
           )
         })}
+      </div>
     </AppWrap>
   )
 }
