@@ -7,6 +7,9 @@ import { UF } from "./components/union-find"
 import { BTUD } from "./components/binary-tree-upside-down"
 import { MRII } from "./components/meeting-rooms-ii"
 import { MPIJS } from "./components/maximum-profit-in-job-scheduling"
+import { payload as w3 } from "./components/witcher3"
+
+import Image from './components/img'
 const options = {
   mode: "javascript",
   theme: "mdn-like",
@@ -18,7 +21,7 @@ const options = {
 }
 const AppWrap = styled.div`
   width: 90%;
-  max-width: 41em;
+  max-width: 900px;
   margin: 0 auto;
   padding: 1.2em 0 5em 0;
 `
@@ -37,6 +40,7 @@ const ImgSec = styled.div`
     max-width: 100%;
   }
 `
+
 const problemsMap = {
   "union-find": UF,
   "binary-tree-upside-down": BTUD,
@@ -59,9 +63,16 @@ export function App() {
   const styles = {
     display: 'none'
   }
+
   return (
     <AppWrap>
-      <h1>Even though we never said it to each other, we knew.</h1>
+      <h1 style={styles}>Even though we never said it to each other, we knew.</h1>
+      {
+        w3.map(e => {
+          const { title, images } = e
+          return <Image key={title} title={title} images={images} />
+        })
+      }
       <div style={styles} >
       <OpsRow>
         <label htmlFor='algorithm-select'>

@@ -6,22 +6,24 @@ module.exports = {
   mode: 'development',
   entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, './dist/static/'),
-    publicPath: '/static/',
-    filename: '[id].[chunkhash].bundle.js',
+    path: path.resolve(__dirname, './'),
+    publicPath: '/',
+    filename: '[id].[hash].bundle.js',
     chunkFilename: '[id].[chunkhash].js',
   },
   module: moduleConfig,
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html',
-      filename: path.resolve(__dirname, './dist/index.html'),
+      template: path.resolve(__dirname, './src/index.html'),
     }),
   ],
+  devtool: 'cheap-eval-source-map',
   devServer: {
-    contentBase: path.join(__dirname, 'dist'),
+    publicPath: "/",
+    contentBase: path.join(__dirname, 'dist/'),
     compress: false,
     host: '0.0.0.0',
+    hot: true,
     port: 9000,
   },
 }
