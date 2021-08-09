@@ -9,6 +9,8 @@ import { MRII } from "./components/meeting-rooms-ii"
 import { MPIJS } from "./components/maximum-profit-in-job-scheduling"
 import { payload as w3 } from "./components/witcher3"
 
+import { Player } from './components/audio'
+
 import Image from './components/img'
 const options = {
   mode: "javascript",
@@ -67,6 +69,7 @@ export function App() {
   return (
     <AppWrap>
       <h1 style={styles}>Even though we never said it to each other, we knew.</h1>
+      <Player />
       {
         w3.map(e => {
           const { title, images } = e

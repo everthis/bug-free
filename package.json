@@ -22,6 +22,7 @@
     "copy-webpack-plugin": "^6.0.0",
     "css-loader": "^3.5.3",
     "file-loader": "^6.0.0",
+    "howler": "^2.2.3",
     "html-loader": "^1.1.0",
     "html-webpack-plugin": "^4.3.0",
     "image-webpack-loader": "^6.0.0",
