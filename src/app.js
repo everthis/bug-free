@@ -22,7 +22,7 @@ const options = {
   viewportMargin: Infinity,
 }
 const AppWrap = styled.div`
-  width: 90%;
+  width: 95%;
   max-width: 900px;
   margin: 0 auto;
   padding: 1.2em 0 5em 0;

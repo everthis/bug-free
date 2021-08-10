@@ -37,7 +37,7 @@ module.exports = {
       },
       threshold: 10240 / 2,
       minRatio: 0.8,
-      deleteOriginalAssets: true,
+      deleteOriginalAssets: false,
     }),
     new CopyPlugin({
       patterns: [
