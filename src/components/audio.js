@@ -194,9 +194,9 @@ export function Player() {
   const renderOps = () => {
     return (
       <>
-        <Op width={40} onClick={playPrev} disabled={curTrack == null}>prev</Op>
+        <Op width={42} onClick={playPrev} disabled={curTrack == null}>prev</Op>
         <Op width={50} onClick={togglePlay}>{playing ? 'pause' : 'play'}</Op>
-        <Op width={40} onClick={playNext} disabled={curTrack == null}>next</Op>
+        <Op width={42} onClick={playNext} disabled={curTrack == null}>next</Op>
       </>
     )
   }
@@ -238,7 +238,7 @@ export function Player() {
       <Wrap>
         <Row>
           <Left>
-            <Op width={85} onClick={toggleCollapsed}>{collapsed ? 'Hide list' : 'Music list'}</Op>
+            <Op width={89} onClick={toggleCollapsed}>{collapsed ? 'Hide list' : 'Music list'}</Op>
           </Left>
           {collapsed ? null : renderNonCollapsed()}
           <Right>
