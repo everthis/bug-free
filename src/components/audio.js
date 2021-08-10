@@ -11,6 +11,7 @@ const Op = styled.span`
   border: 1px solid #ddd;
   margin: 0 2px;
   padding: 5px;
+  text-align: center;
   &:first-child {
     margin-left: 0;
   }
@@ -72,7 +73,7 @@ const Row = styled.div`
 const Dur = styled.div``
 const Left = styled.div``
 const Right = styled.div`
-  width: 140px;
+  width: 145px;
   flex-shrink: 0;
 `
 const List = styled.div`
@@ -238,7 +239,7 @@ export function Player() {
       <Wrap>
         <Row>
           <Left>
-            <Op width={89} onClick={toggleCollapsed}>{collapsed ? 'Hide list' : 'Music list'}</Op>
+            <Op width={91} onClick={toggleCollapsed}>{collapsed ? 'Hide list' : 'Music list'}</Op>
           </Left>
           {collapsed ? null : renderNonCollapsed()}
           <Right>
