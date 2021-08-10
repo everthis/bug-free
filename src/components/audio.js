@@ -9,21 +9,42 @@ const Op = styled.span`
   display: inline-block;
   cursor: pointer;
   border: 1px solid #ddd;
-  margin: 0 5px;
+  margin: 0 2px;
   padding: 5px;
   &:first-child {
     margin-left: 0;
   }
   ${({ disabled }) => disabled && `
-  background: #ddd;
-`}
-`
-const Track = styled.div`
-  cursor: pointer;
-  ${({ active }) => active && `
-    background: #ea9999;
+    background: #ddd;
+  `}
+  ${({ width }) => width && `
+    width: ${width}px;
   `}
 `
+const Track = styled.div`
+  position: relative;
+  cursor: pointer;
+  ${({ active }) => active && `
+    background: #f7c7c7;
+  `}
+`
+
+const Progress = styled.div`
+  content: '';
+  display: block;
+  position: absolute;
+  top:0;
+  left: 0;
+  height: 1em;
+  background-color: red;
+`
+const Content = styled.div`
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  z-index: 1;
+`
+
 const Container = styled.div`
   position: relative;
 `
@@ -33,7 +54,7 @@ const Wrap = styled.div`
 `
 const Abs = styled.div`
   position: absolute;
-  top: 0;
+  top: 2.5em;
   left: 0;
   width: 100%;
   background: white;
@@ -48,21 +69,39 @@ const Row = styled.div`
   display: flex;
   justify-content: space-between;
 `
+const Dur = styled.div``
 const Left = styled.div``
-const Right = styled.div``
+const Right = styled.div`
+  width: 140px;
+  flex-shrink: 0;
+`
 const List = styled.div`
-  padding: 1em 0;
+  padding: .5em 0 1em;
+`
+const Title = styled.div`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 2em;
 `
 
 let curMusic
 
+function formatTime(secs) {
+  const minutes = Math.floor(secs / 60) || 0;
+  const seconds = (secs - minutes * 60) || 0;
+
+  return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+}
 export function Player() {
   const [curTrack, setCurTrack] = useState(null)
   const [playing, setPlaying] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
+  const [duration, setDuration] = useState(Array(list.length))
+  const [progress, setProgress] = useState('')
+  const [percentage, setPercentage] = useState('')
 
   const onTrackClick = (i) => {
-    const e = list[i]
     setCurTrack(i)
     playTrack(i)
   }
@@ -72,7 +111,14 @@ export function Player() {
     const src = `${prefix}${name}`
     if (curMusic) curMusic.stop()
     curMusic = new Howl({
-      src: [src]
+      src: [src],
+      html5: true,
+      onplay: function() {
+        const clone = duration.slice(0)
+        clone[i] = formatTime(~~curMusic.duration())
+        setDuration(clone)
+        requestAnimationFrame(step.bind(null))
+      }
     });
     curMusic.play()
     setPlaying(true)
@@ -125,6 +171,7 @@ export function Player() {
   }
 
   function removeExt(str) {
+    if (str == null) return ''
     const idx = str.indexOf('.mp3')
     if (idx !== -1) {
       return str.slice(0, idx)
@@ -132,24 +179,46 @@ export function Player() {
     return str
   }
 
+  function step() {
+    if(curMusic == null) return
+    const seek = curMusic.seek() || 0;
+    const took = formatTime(Math.round(seek));
+    setProgress(took)
+    const width = (((seek / curMusic.duration()) * 100) || 0) + '%';
+    setPercentage(width)
+    if (curMusic.playing()) {
+      requestAnimationFrame(step.bind(null));
+    }
+  }
+
+  const renderOps = () => {
+    return (
+      <>
+        <Op width={40} onClick={playPrev} disabled={curTrack == null}>prev</Op>
+        <Op width={50} onClick={togglePlay}>{playing ? 'pause' : 'play'}</Op>
+        <Op width={40} onClick={playNext} disabled={curTrack == null}>next</Op>
+      </>
+    )
+  }
+
+  const styles = {
+    width: percentage,
+  }
+
   const renderCollapsed = () => (
     <Abs>
-      <Row>
-        <Left>
-          <Op onClick={toggleCollapsed}>Hide list</Op>
-        </Left>
-
-        <Right>
-          <Op onClick={playPrev} disabled={curTrack == null}>prev</Op>
-          <Op onClick={togglePlay}>{playing ? 'pause' : 'play'}</Op>
-          <Op onClick={playNext} disabled={curTrack == null}>next</Op>
-        </Right>
-
-      </Row>
       <List>
         {
           list.map((e, i) => {
-            return <Track key={i} active={i === curTrack} onClick={() => onTrackClick(i)}>{removeExt(e)}</Track>
+            return (
+              <Track key={i} active={i === curTrack} onClick={() => onTrackClick(i)}>
+                <Progress style={i === curTrack ? styles : null}></Progress>
+                <Content>
+                  {removeExt(e)}
+                  <Dur>{i === curTrack ? `${progress}/` : ''}{duration[i]}</Dur>
+                </Content>
+              </Track>
+            )
           })
         }
       </List>
@@ -159,8 +228,7 @@ export function Player() {
   const renderNonCollapsed = () => {
     return (
       <>
-        <span>{curTrack ? `${playing ? 'Playing' : 'Paused'}: ${removeExt(list[curTrack])}` : ''}</span>
-        {curTrack != null ? <Op onClick={togglePlay}>{playing ? 'pause' : 'play'}</Op> : null}
+        <Title>{curTrack != null ? `${playing ? 'Playing' : 'Paused'}: ${removeExt(list[curTrack])}` : ''}</Title>
       </>
     )
   }
@@ -168,8 +236,17 @@ export function Player() {
   return (
     <Container>
       <Wrap>
-        <Switch onClick={toggleCollapsed}><Op>Music list</Op></Switch>
-        {collapsed ? renderCollapsed() : renderNonCollapsed()}
+        <Row>
+          <Left>
+            <Op width={85} onClick={toggleCollapsed}>{collapsed ? 'Hide list' : 'Music list'}</Op>
+          </Left>
+          {collapsed ? null : renderNonCollapsed()}
+          <Right>
+            {renderOps()}
+          </Right>
+
+        </Row>
+        {collapsed ? renderCollapsed() : null}
       </Wrap>
     </Container>
   )
