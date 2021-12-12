@@ -19,11 +19,12 @@ module.exports = {
   ],
   devtool: 'cheap-eval-source-map',
   devServer: {
-    publicPath: "/",
+    publicPath: '/',
     contentBase: path.join(__dirname, 'dist/'),
     compress: false,
     host: '0.0.0.0',
     hot: true,
     port: 9000,
+    historyApiFallback: true,
   },
 }
